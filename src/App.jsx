@@ -278,9 +278,14 @@ function FlowerShape({ type, showStem = true }) {
   }
 }
 
-function FlowerSvg({ type, className = 'w-14 h-22 sm:w-20 sm:h-32', showStem = true }) {
+// Sử dụng các class chuẩn của Tailwind v3 (w-14 h-24 sm:w-20 sm:h-32) để SVG luôn hiện rõ trên Mobile
+function FlowerSvg({ type, className = 'w-14 h-24 sm:w-20 sm:h-32', showStem = true }) {
   return (
-    <svg viewBox="0 0 80 130" className={className}>
+    <svg
+      viewBox="0 0 80 130"
+      className={`block shrink-0 ${className}`}
+      preserveAspectRatio="xMidYMid meet"
+    >
       <FlowerShape type={type} showStem={showStem} />
     </svg>
   );
@@ -364,7 +369,7 @@ function BouquetGraphic({
   });
 
   return (
-    <div className="relative w-[260px] sm:w-[325px] h-[260px] sm:h-[325px] mx-auto select-none flex items-center justify-center">
+    <div className="relative w-[240px] sm:w-[320px] h-[240px] sm:h-[320px] mx-auto select-none flex items-center justify-center">
       <svg viewBox="0 0 300 300" className="w-full h-full overflow-visible drop-shadow-sm">
         <defs>
           <clipPath id="bouquetConeClip">
@@ -446,7 +451,7 @@ function BouquetGraphic({
           strokeWidth="2"
         />
 
-        {/* Dải ruy băng ngang eo bó hoa (Tâm chính xác tại x=150, y=231.5) */}
+        {/* Dải ruy băng ngang eo bó hoa */}
         <rect x="111" y="225" width="78" height="13" rx="6.5" fill="#E44D6E" />
         <rect x="114" y="227" width="72" height="3" rx="1.5" fill="#F78DA5" opacity="0.5" />
 
@@ -476,8 +481,8 @@ function BouquetGraphic({
       </svg>
 
       {isEmpty && (
-        <div className="absolute inset-x-10 top-[35%] text-center pointer-events-none">
-          <p className="font-serif-display italic text-[#A69382] text-sm sm:text-base leading-snug">
+        <div className="absolute inset-x-8 top-[35%] text-center pointer-events-none">
+          <p className="font-serif-display italic text-[#A69382] text-xs sm:text-base leading-snug">
             Bó hoa của cả nhà
             <br />
             đang chờ những điều dịu dàng
@@ -485,7 +490,7 @@ function BouquetGraphic({
         </div>
       )}
 
-      {/* Vòng tròn chạm thắt nơ ở Bước 3: Tách lớp căn giữa (-translate) và lớp nhịp đập (animate-pulse-soft) để không bị lệch */}
+      {/* Vòng tròn chạm thắt nơ ở Bước 3 */}
       {showBowTarget && !hasBow && (
         <div className="absolute left-1/2 top-[77.2%] -translate-x-1/2 -translate-y-1/2 z-20">
           <button
@@ -499,12 +504,12 @@ function BouquetGraphic({
         </div>
       )}
 
-      {/* Thẻ thiệp treo ở Bước 4: Đã thu nhỏ gọn gàng và hạ xuống dưới phần chân bó hoa để không che khuất hoa */}
+      {/* Thẻ thiệp treo ở Bước 4 */}
       {showGiftTag && (
         <div className="absolute -bottom-3 sm:-bottom-2 right-1 sm:-right-3 z-20 animate-stage-enter">
           <div
             onClick={onOpenCard}
-            className="bg-white/95 backdrop-blur-xs border border-[#F2CFD8] rounded-xl p-2 sm:p-2.5 shadow-lg -rotate-6 hover:rotate-0 transition-transform duration-300 cursor-pointer w-[132px] sm:w-[152px]"
+            className="bg-white/95 backdrop-blur-sm border border-[#F2CFD8] rounded-xl p-2 sm:p-2.5 shadow-lg -rotate-6 hover:rotate-0 transition-transform duration-300 cursor-pointer w-[132px] sm:w-[152px]"
           >
             <div className="w-2 h-2 rounded-full bg-[#E6BCC7] mx-auto mb-1 shadow-inner" />
             <p className="font-handwriting text-[#3A2429] text-[13px] sm:text-[15px] leading-tight text-center mb-1.5">
@@ -516,7 +521,7 @@ function BouquetGraphic({
                 e.stopPropagation();
                 onOpenCard();
               }}
-              className="w-full py-1 px-2 rounded-full bg-[#E13D63] hover:bg-[#C8294E] active:scale-95 text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase shadow-xs transition-all cursor-pointer"
+              className="w-full py-1 px-2 rounded-full bg-[#E13D63] hover:bg-[#C8294E] active:scale-95 text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase shadow-sm transition-all cursor-pointer"
             >
               MỞ THIỆP NHÉ
             </button>
@@ -638,7 +643,7 @@ export default function App() {
             <button
               type="button"
               onClick={handleReplay}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-[#FFF8F9] border border-[#E2D6C8] text-[#4E3D35] font-medium text-[11px] shadow-xs active:scale-95 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-[#FFF8F9] border border-[#E2D6C8] text-[#4E3D35] font-medium text-[11px] shadow-sm active:scale-95 transition-all cursor-pointer"
             >
               <RotateCcw className="w-3 h-3 text-[#E13D63]" />
               <span>Xem lại từ đầu</span>
@@ -647,7 +652,7 @@ export default function App() {
           <button
             type="button"
             onClick={handleResetPhotos}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-[#FFF8F9] border border-[#E2D6C8] text-[#4E3D35] font-medium text-[11px] shadow-xs active:scale-95 transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-[#FFF8F9] border border-[#E2D6C8] text-[#4E3D35] font-medium text-[11px] shadow-sm active:scale-95 transition-all cursor-pointer"
             title="Đưa ảnh về mặc định trong thư mục public"
           >
             <Camera className="w-3 h-3 text-[#E13D63]" />
@@ -769,7 +774,7 @@ export default function App() {
                   >
                     <div className="w-full h-20 bg-[#F6FAEE] rounded border-2 border-[#78964E] flex flex-col items-center justify-center relative">
                       <div className="w-3 h-2 border-t border-l border-r border-[#B89F7D] -mb-0.5" />
-                      <div className="bg-[#FFF8EB] border border-[#D4B895] px-2 py-0.5 rounded text-[9px] font-extrabold tracking-widest text-[#E13D63] shadow-xs group-hover:scale-105 transition-transform">
+                      <div className="bg-[#FFF8EB] border border-[#D4B895] px-2 py-0.5 rounded text-[9px] font-extrabold tracking-widest text-[#E13D63] shadow-sm group-hover:scale-105 transition-transform">
                         OPEN
                       </div>
                     </div>
@@ -778,7 +783,7 @@ export default function App() {
                       <span className="w-2.5 h-2.5 rounded-full bg-[#FFC72C] shadow" />
                     </div>
 
-                    <div className="w-full h-10 border-2 border-[#7E9C53] rounded-xs bg-[#89A85D]" />
+                    <div className="w-full h-10 border-2 border-[#7E9C53] rounded-sm bg-[#89A85D]" />
                   </button>
                 </div>
 
@@ -793,7 +798,7 @@ export default function App() {
 
                 <div className="absolute -right-5 sm:-right-7 -bottom-2 flex flex-col items-center pointer-events-none">
                   <div className="flex items-end -mb-3">
-                    <FlowerSvg type="daisy" className="w-9 h-13 -mr-2.5 rotate-[-10deg]" />
+                    <FlowerSvg type="daisy" className="w-9 h-14 -mr-2.5 rotate-[-10deg]" />
                     <FlowerSvg type="tulip" className="w-9 h-14 z-10" />
                   </div>
                   <div className="w-10 h-8 bg-[#9CA3AF] rounded-b-lg border-t-4 border-[#6B7280] shadow-md z-20" />
@@ -825,10 +830,10 @@ export default function App() {
       )}
 
       {/* =====================================================================
-          MÀN HÌNH 2: CHỌN 5 BÔNG HOA TRÊN KỆ GỖ (Đã căn đều hàng & dấu +)
+          MÀN HÌNH 2: CHỌN 5 BÔNG HOA TRÊN KỆ GỖ (Hiển thị rõ 100% trên Điện thoại)
       ===================================================================== */}
       {stage === 2 && (
-        <main className="relative z-10 flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-3 sm:py-6 flex flex-col justify-between items-center animate-stage-enter">
+        <main className="relative z-10 flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-2 sm:py-6 flex flex-col justify-center items-center gap-4 sm:gap-8 animate-stage-enter">
           <div className="text-center max-w-lg mx-auto">
             <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2B211E] leading-tight">
               Mọi người chọn hoa,
@@ -844,7 +849,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-8 items-center my-auto py-2">
+          <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 items-center">
             <div className="order-1 lg:order-2 lg:col-span-5 flex flex-col items-center">
               <BouquetGraphic
                 selectedFlowers={selectedFlowers}
@@ -874,19 +879,19 @@ export default function App() {
                             : 'hover:-translate-y-2 active:scale-90 cursor-pointer'
                         }`}
                       >
-                        <div className="relative flex items-center justify-center">
+                        {/* Khóa kích thước chuẩn w-14 h-24 (56x96px) trên điện thoại để SVG luôn hiển thị */}
+                        <div className="relative w-14 h-24 sm:w-20 sm:h-32 flex items-center justify-center">
                           <FlowerSvg
                             type={flower.id}
-                            className="w-13 h-22 sm:w-20 sm:h-32 drop-shadow-xs"
+                            className="w-full h-full drop-shadow-sm"
                           />
                           {!isPicked && (
-                            <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white border border-[#F2C8D4] text-[#E13D63] text-[10px] sm:text-xs leading-none font-bold flex items-center justify-center shadow-xs group-hover:scale-110">
+                            <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white border border-[#F2C8D4] text-[#E13D63] text-[10px] sm:text-xs leading-none font-bold flex items-center justify-center shadow-sm group-hover:scale-110">
                               +
                             </span>
                           )}
                         </div>
-                        {/* Cố định chiều cao nhãn tên hoa để 5 bông luôn đứng bằng nhau trên kệ */}
-                        <span className="mt-1 h-6 sm:h-5 flex items-center justify-center text-[9.5px] sm:text-xs font-semibold text-[#4A3A32] text-center leading-tight whitespace-nowrap">
+                        <span className="mt-1 h-5 flex items-center justify-center text-[9.5px] sm:text-xs font-semibold text-[#4A3A32] text-center leading-tight whitespace-nowrap">
                           {flower.name}
                         </span>
                       </button>
@@ -977,7 +982,7 @@ export default function App() {
       {stage === 5 && (
         <main className="relative z-10 flex-1 w-full max-w-5xl mx-auto px-3 sm:px-6 py-3 sm:py-6 flex items-center justify-center animate-stage-enter">
           <div className="relative w-full bg-[#FFFDF9] border border-[#E5D8C5] rounded-2xl shadow-xl p-5 sm:p-8 lg:p-10 overflow-hidden">
-            <div className="absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-[#FCE2E8] flex items-center justify-center text-[#E13D63] text-base shadow-2xs select-none">
+            <div className="absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-[#FCE2E8] flex items-center justify-center text-[#E13D63] text-base shadow-sm select-none">
               ✿
             </div>
 
@@ -1028,14 +1033,14 @@ export default function App() {
                 </div>
 
                 <div className="relative bg-white p-3.5 sm:p-4 pb-5 rounded-xl shadow-lg border border-[#E6DCD0] w-full max-w-[275px] sm:max-w-[295px] transition-all duration-300 hover:rotate-0 rotate-[1.2deg]">
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#8FB868] rotate-[-1.5deg] rounded-md shadow-xs flex items-center justify-center text-[11px] text-white font-semibold tracking-wide whitespace-nowrap">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#8FB868] rotate-[-1.5deg] rounded-md shadow-sm flex items-center justify-center text-[11px] text-white font-semibold tracking-wide whitespace-nowrap">
                     {activeMember.roleTag}
                   </div>
 
-                  <div className="absolute -top-3.5 -left-3.5 w-8 h-8 pointer-events-none select-none drop-shadow-2xs">
+                  <div className="absolute -top-3.5 -left-3.5 w-8 h-8 pointer-events-none select-none drop-shadow-sm">
                     <FlowerSvg type="rose" className="w-8 h-8" showStem={false} />
                   </div>
-                  <div className="absolute -bottom-3 -right-3 w-8 h-8 pointer-events-none select-none drop-shadow-2xs">
+                  <div className="absolute -bottom-3 -right-3 w-8 h-8 pointer-events-none select-none drop-shadow-sm">
                     <FlowerSvg type="daisy" className="w-8 h-8" showStem={false} />
                   </div>
 
@@ -1053,7 +1058,7 @@ export default function App() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors flex items-end justify-end p-2.5">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/60 text-white text-[10px] font-medium backdrop-blur-xs">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/60 text-white text-[10px] font-medium backdrop-blur-sm">
                         <Maximize2 className="w-3 h-3" />
                         Chạm phóng to
                       </span>
@@ -1125,7 +1130,7 @@ export default function App() {
       {lightboxOpen && (
         <div
           onClick={() => setLightboxOpen(false)}
-          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-stage-enter"
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 animate-stage-enter"
         >
           <div
             onClick={(e) => e.stopPropagation()}
