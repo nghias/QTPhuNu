@@ -7,8 +7,6 @@ import {
   X,
   RotateCcw,
   Camera,
-  Edit3,
-  Check,
   Maximize2,
 } from 'lucide-react';
 
@@ -448,6 +446,7 @@ function BouquetGraphic({
           strokeWidth="2"
         />
 
+        {/* Dải ruy băng ngang eo bó hoa (Tâm chính xác tại x=150, y=231.5) */}
         <rect x="111" y="225" width="78" height="13" rx="6.5" fill="#E44D6E" />
         <rect x="114" y="227" width="72" height="3" rx="1.5" fill="#F78DA5" opacity="0.5" />
 
@@ -463,6 +462,17 @@ function BouquetGraphic({
             <ellipse cx="-1.5" cy="-1" rx="2.5" ry="1.5" fill="#FF9EBB" opacity="0.6" />
           </g>
         )}
+
+        {/* Dây treo mảnh nối từ nút nơ sang thẻ thiệp ở Bước 4 */}
+        {showGiftTag && (
+          <path
+            d="M155 233 Q178 232 195 242"
+            fill="none"
+            stroke="#D9A7B2"
+            strokeWidth="1.5"
+            strokeDasharray="2 2"
+          />
+        )}
       </svg>
 
       {isEmpty && (
@@ -475,36 +485,42 @@ function BouquetGraphic({
         </div>
       )}
 
+      {/* Vòng tròn chạm thắt nơ ở Bước 3: Tách lớp căn giữa (-translate) và lớp nhịp đập (animate-pulse-soft) để không bị lệch */}
       {showBowTarget && !hasBow && (
-        <button
-          type="button"
-          onClick={onTieBow}
-          aria-label="Chạm để thắt nơ"
-          className="absolute left-1/2 top-[77%] -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border-2 border-dashed border-[#E13D63] bg-[#FFF0F3]/85 flex items-center justify-center shadow-lg animate-pulse-soft cursor-pointer active:scale-90 transition-transform"
-        >
-          <span className="w-4 h-4 rounded-full bg-[#E13D63]" />
-        </button>
-      )}
-
-      {showGiftTag && (
-        <div
-          onClick={onOpenCard}
-          className="absolute right-0 sm:-right-3 bottom-5 sm:bottom-7 bg-white border border-[#F2CFD8] rounded-xl p-3 sm:p-3.5 shadow-xl rotate-[-5deg] hover:rotate-0 transition-all duration-300 cursor-pointer max-w-[170px] sm:max-w-[185px] animate-stage-enter"
-        >
-          <div className="w-2.5 h-2.5 rounded-full bg-[#E6BCC7] mx-auto mb-1.5 shadow-inner" />
-          <p className="font-handwriting text-[#3A2429] text-base sm:text-lg leading-tight text-center mb-2.5">
-            {tagGreeting}
-          </p>
+        <div className="absolute left-1/2 top-[77.2%] -translate-x-1/2 -translate-y-1/2 z-20">
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onOpenCard();
-            }}
-            className="w-full py-1.5 px-3 rounded-full bg-[#E13D63] hover:bg-[#C8294E] active:scale-95 text-white text-[10px] sm:text-xs font-bold tracking-wider uppercase shadow-sm transition-all"
+            onClick={onTieBow}
+            aria-label="Chạm để thắt nơ"
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-dashed border-[#E13D63] bg-[#FFF0F3]/85 flex items-center justify-center shadow-lg animate-pulse-soft cursor-pointer active:scale-90 transition-transform"
           >
-            MỞ THIỆP NHÉ
+            <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-[#E13D63]" />
           </button>
+        </div>
+      )}
+
+      {/* Thẻ thiệp treo ở Bước 4: Đã thu nhỏ gọn gàng và hạ xuống dưới phần chân bó hoa để không che khuất hoa */}
+      {showGiftTag && (
+        <div className="absolute -bottom-3 sm:-bottom-2 right-1 sm:-right-3 z-20 animate-stage-enter">
+          <div
+            onClick={onOpenCard}
+            className="bg-white/95 backdrop-blur-xs border border-[#F2CFD8] rounded-xl p-2 sm:p-2.5 shadow-lg -rotate-6 hover:rotate-0 transition-transform duration-300 cursor-pointer w-[132px] sm:w-[152px]"
+          >
+            <div className="w-2 h-2 rounded-full bg-[#E6BCC7] mx-auto mb-1 shadow-inner" />
+            <p className="font-handwriting text-[#3A2429] text-[13px] sm:text-[15px] leading-tight text-center mb-1.5">
+              {tagGreeting}
+            </p>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenCard();
+              }}
+              className="w-full py-1 px-2 rounded-full bg-[#E13D63] hover:bg-[#C8294E] active:scale-95 text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase shadow-xs transition-all cursor-pointer"
+            >
+              MỞ THIỆP NHÉ
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -809,10 +825,10 @@ export default function App() {
       )}
 
       {/* =====================================================================
-          MÀN HÌNH 2: CHỌN 5 BÔNG HOA TRÊN KỆ GỖ (Tối ưu Mobile hiển thị đủ hoa)
+          MÀN HÌNH 2: CHỌN 5 BÔNG HOA TRÊN KỆ GỖ (Đã căn đều hàng & dấu +)
       ===================================================================== */}
       {stage === 2 && (
-        <main className="relative z-10 flex-1 w-full max-w-5xl mx-auto px-4 py-3 sm:py-6 flex flex-col justify-between items-center animate-stage-enter">
+        <main className="relative z-10 flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-3 sm:py-6 flex flex-col justify-between items-center animate-stage-enter">
           <div className="text-center max-w-lg mx-auto">
             <h2 className="font-serif-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2B211E] leading-tight">
               Mọi người chọn hoa,
@@ -852,24 +868,25 @@ export default function App() {
                         type="button"
                         disabled={isPicked}
                         onClick={() => handleSelectFlower(flower.id)}
-                        className={`group flex flex-col items-center focus:outline-none transition-all duration-300 ${
+                        className={`group flex flex-col items-center justify-end focus:outline-none transition-all duration-300 ${
                           isPicked
-                            ? 'opacity-25 scale-90 translate-y-2 cursor-default'
+                            ? 'opacity-25 scale-90 translate-y-1 cursor-default'
                             : 'hover:-translate-y-2 active:scale-90 cursor-pointer'
                         }`}
                       >
-                        <div className="relative">
+                        <div className="relative flex items-center justify-center">
                           <FlowerSvg
                             type={flower.id}
-                            className="w-12 h-20 sm:w-20 sm:h-32 drop-shadow-xs"
+                            className="w-13 h-22 sm:w-20 sm:h-32 drop-shadow-xs"
                           />
                           {!isPicked && (
-                            <span className="absolute -top-1 right-0 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white border border-[#F2C8D4] text-[#E13D63] text-[10px] sm:text-xs font-bold flex items-center justify-center shadow-xs group-hover:scale-110">
+                            <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1.5 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white border border-[#F2C8D4] text-[#E13D63] text-[10px] sm:text-xs leading-none font-bold flex items-center justify-center shadow-xs group-hover:scale-110">
                               +
                             </span>
                           )}
                         </div>
-                        <span className="mt-1 text-[10px] sm:text-xs font-semibold text-[#4A3A32] text-center leading-tight">
+                        {/* Cố định chiều cao nhãn tên hoa để 5 bông luôn đứng bằng nhau trên kệ */}
+                        <span className="mt-1 h-6 sm:h-5 flex items-center justify-center text-[9.5px] sm:text-xs font-semibold text-[#4A3A32] text-center leading-tight whitespace-nowrap">
                           {flower.name}
                         </span>
                       </button>
@@ -877,7 +894,7 @@ export default function App() {
                   })}
                 </div>
 
-                <div className="w-full h-3.5 sm:h-4 bg-gradient-to-b from-[#DFBC94] to-[#C49A6C] rounded-full shadow-md mt-2 border-t border-[#EAD1B3]" />
+                <div className="w-full h-3.5 sm:h-4 bg-gradient-to-b from-[#DFBC94] to-[#C49A6C] rounded-full shadow-md mt-1 border-t border-[#EAD1B3]" />
               </div>
             </div>
           </div>
@@ -916,7 +933,7 @@ export default function App() {
       )}
 
       {/* =====================================================================
-          MÀN HÌNH 4: BÓ HOA HOÀN CHỈNH KÈM THIỆP
+          MÀN HÌNH 4: BÓ HOA HOÀN CHỈNH KÈM THIỆP NHỎ Ở CHÂN BÓ HOA
       ===================================================================== */}
       {stage === 4 && (
         <main className="relative z-10 flex-1 w-full max-w-3xl mx-auto px-4 py-6 flex flex-col items-center justify-center text-center animate-stage-enter">
@@ -930,7 +947,7 @@ export default function App() {
             </span>
           </h2>
 
-          <div className="my-4 sm:my-6">
+          <div className="my-5 sm:my-7">
             <BouquetGraphic
               selectedFlowers={FLOWERS.map((f) => f.id)}
               hasBow={true}
@@ -941,7 +958,7 @@ export default function App() {
             />
           </div>
 
-          <p className="text-xs sm:text-base text-[#635249] font-serif-display italic font-semibold">
+          <p className="mt-2 text-xs sm:text-base text-[#635249] font-serif-display italic font-semibold">
             Mình có để giấu một tấm thiệp trong bó hoa... Chạm vào nút{' '}
             <button
               type="button"
